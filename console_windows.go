@@ -1,10 +1,9 @@
-//go:build amd64
-// +build amd64
+//go:build windows
+// +build windows
 
 package console
 
 import (
-	"embed"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -14,8 +13,8 @@ import (
 	"strings"
 	"syscall"
 
+	"github.com/abakum/go-console/interfaces"
 	"github.com/iamacarpet/go-winpty"
-	"github.com/runletapp/go-console/interfaces"
 )
 
 // Do the interface allocations only once for common
@@ -27,9 +26,6 @@ const (
 var (
 	errERROR_IO_PENDING error = syscall.Errno(errnoERROR_IO_PENDING)
 )
-
-//go:embed winpty/amd64/*
-var winpty_deps embed.FS
 
 // errnoErr returns common boxed Errno values, to prevent
 // allocations at runtime.
@@ -102,7 +98,7 @@ func (c *consoleWindows) UnloadEmbeddedDeps() (string, error) {
 	}
 	executableName = filepath.Base(executableName)
 
-	dllDir := filepath.Join(os.TempDir(), fmt.Sprintf("%s_winpty", executableName))
+	dllDir := filepath.Join(os.TempDir(), fmt.Sprintf("winpty/%s", runtime.GOARCH))
 
 	if err := os.MkdirAll(dllDir, 0755); err != nil {
 		return "", err

@@ -7,7 +7,7 @@ import (
 	"runtime"
 	"sync"
 
-	"github.com/runletapp/go-console"
+	"github.com/abakum/go-console"
 )
 
 func main() {
@@ -20,6 +20,8 @@ func main() {
 
 	var args []string
 
+	log.Println("runtime.GOOS", runtime.GOOS)
+	log.Println("runtime.GOARCH", runtime.GOARCH)
 	if runtime.GOOS == "windows" {
 		args = []string{"cmd.exe", "/c", "dir"}
 	} else {
