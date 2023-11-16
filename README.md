@@ -38,6 +38,8 @@ func main() {
 
 	var args []string
 
+	log.Println("runtime.GOOS", runtime.GOOS)
+	log.Println("runtime.GOARCH", runtime.GOARCH)
 	if runtime.GOOS == "windows" {
 		args = []string{"cmd.exe", "/c", "dir"}
 	} else {
