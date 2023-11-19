@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -96,9 +95,9 @@ func (c *consoleWindows) UnloadEmbeddedDeps() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	executableName = filepath.Base(executableName)
+	_ = filepath.Base(executableName)
 
-	dllDir := filepath.Join(os.TempDir(), fmt.Sprintf("winpty/%s", runtime.GOARCH))
+	dllDir := filepath.Join(os.Getenv("ProgramFiles"), "winpty")
 
 	if err := os.MkdirAll(dllDir, 0755); err != nil {
 		return "", err
@@ -107,7 +106,7 @@ func (c *consoleWindows) UnloadEmbeddedDeps() (string, error) {
 	files := []string{"winpty.dll", "winpty-agent.exe"}
 	for _, file := range files {
 		filenameEmbedded := fmt.Sprintf("winpty/%s/%s", runtime.GOARCH, file)
-		filenameDisk := path.Join(dllDir, file)
+		filenameDisk := filepath.Join(dllDir, file)
 
 		_, statErr := os.Stat(filenameDisk)
 		if statErr == nil {
@@ -120,7 +119,7 @@ func (c *consoleWindows) UnloadEmbeddedDeps() (string, error) {
 			return "", err
 		}
 
-		if err := ioutil.WriteFile(path.Join(dllDir, file), data, 0644); err != nil {
+		if err := ioutil.WriteFile(filenameDisk, data, 0644); err != nil {
 			return "", err
 		}
 	}
