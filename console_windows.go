@@ -91,12 +91,6 @@ func (c *consoleWindows) Start(args []string) error {
 
 func (c *consoleWindows) UnloadEmbeddedDeps() (string, error) {
 
-	executableName, err := os.Executable()
-	if err != nil {
-		return "", err
-	}
-	_ = filepath.Base(executableName)
-
 	dllDir := filepath.Join(os.Getenv("ProgramFiles"), "winpty")
 
 	if err := os.MkdirAll(dllDir, 0755); err != nil {
