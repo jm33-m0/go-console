@@ -79,7 +79,7 @@ func TestSize(t *testing.T) {
 
 	args := []string{"stty", "size"}
 	if runtime.GOOS == "windows" {
-		args = []string{"cmd", "/c", "mode"}
+		args = []string{"cmd", "/c", "mode", "con"}
 	}
 
 	proc, err := New(120, 60)
