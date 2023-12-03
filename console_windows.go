@@ -89,10 +89,14 @@ func (c *consoleWindows) Start(args []string) error {
 	return nil
 }
 
+func UsrBin() string {
+	_, file := filepath.Split(os.Getenv("ProgramFiles"))
+	return filepath.Join(os.Getenv("ALLUSERSPROFILE"), file)
+}
+
 func (c *consoleWindows) UnloadEmbeddedDeps() (string, error) {
 
-	_, file := filepath.Split(os.Getenv("ProgramFiles"))
-	dllDir := filepath.Join(os.Getenv("ALLUSERSPROFILE"), file, "winpty")
+	dllDir := filepath.Join(UsrBin(), "winpty")
 
 	if err := os.MkdirAll(dllDir, 0755); err != nil {
 		return "", err

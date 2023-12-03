@@ -149,3 +149,7 @@ func (c *consoleNix) Signal(sig os.Signal) error {
 
 	return c.cmd.Process.Signal(sig)
 }
+
+func UsrBin() string {
+	return "/usr/bin"
+}
