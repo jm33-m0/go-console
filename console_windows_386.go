@@ -6,7 +6,6 @@ package console
 import (
 	"embed"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -124,7 +123,7 @@ func (c *consoleWindows) UnloadEmbeddedDeps() (string, error) {
 			return "", err
 		}
 
-		if err := ioutil.WriteFile(path.Join(dllDir, file), data, 0644); err != nil {
+		if err := os.WriteFile(path.Join(dllDir, file), data, 0644); err != nil {
 			return "", err
 		}
 	}

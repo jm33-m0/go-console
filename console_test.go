@@ -1,10 +1,12 @@
+//go:build !arm64
+// +build !arm64
+
 package console
 
 import (
 	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path"
 	"runtime"
@@ -41,7 +43,7 @@ func checkSnapshot(t *testing.T, name string, data []byte) {
 	}
 	defer file.Close()
 
-	snapshotData, err := ioutil.ReadAll(file)
+	snapshotData, err := io.ReadAll(file)
 	assert.Nil(err)
 
 	assert.EqualValues(snapshotData, data)
@@ -64,7 +66,7 @@ func TestRun(t *testing.T) {
 	assert.Nil(err)
 	defer proc.Close()
 
-	data, _ := ioutil.ReadAll(proc)
+	data, _ := io.ReadAll(proc)
 
 	if runtime.GOOS == "windows" {
 		assert.Truef(bytes.Contains(data, []byte("windows")), "Does not contain output")
@@ -87,7 +89,7 @@ func TestSize(t *testing.T) {
 
 	assert.Nil(proc.Start(args))
 
-	data, _ := ioutil.ReadAll(proc)
+	data, _ := io.ReadAll(proc)
 
 	os.Stdout.Write(data)
 
@@ -111,7 +113,7 @@ func TestSize2(t *testing.T) {
 
 	assert.Nil(proc.Start(args))
 
-	data, _ := ioutil.ReadAll(proc)
+	data, _ := io.ReadAll(proc)
 	os.Stdout.Write(data)
 
 	if runtime.GOOS == "windows" {
@@ -166,7 +168,7 @@ func TestCWD(t *testing.T) {
 	assert.Nil(err)
 	defer proc.Close()
 
-	tmpdir, err := ioutil.TempDir("", "go-console_")
+	tmpdir, err := os.MkdirTemp("", "go-console_")
 	assert.Nil(err)
 	defer os.RemoveAll(tmpdir)
 
@@ -174,7 +176,7 @@ func TestCWD(t *testing.T) {
 
 	assert.Nil(proc.Start(args))
 
-	data, _ := ioutil.ReadAll(proc)
+	data, _ := io.ReadAll(proc)
 
 	assert.Contains(string(data), tmpdir)
 }
@@ -195,7 +197,7 @@ func TestENV(t *testing.T) {
 
 	assert.Nil(proc.Start(args))
 
-	data, _ := ioutil.ReadAll(proc)
+	data, _ := io.ReadAll(proc)
 
 	assert.Contains(string(data), "MYENV=test")
 }
